@@ -36,6 +36,7 @@ class String{
 		String &replace(int pos,int len,const String &);
 		String &insert(int pos,const String&);
 		String &insert(int pos,const char *);
+		String &insert(int pos,int n,const char);
 		~String(){
 			free();
 		}

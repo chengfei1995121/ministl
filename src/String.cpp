@@ -368,3 +368,39 @@ String &String::insert(int pos,const char *c)
 	}
 	return *this;
 }
+String &String::insert(int pos,int n,const char c)
+{
+	if(size()+n<capacity())
+	{
+		for(int i=0;i<n;i++)
+		{
+			alloc.construct(send+i,'0');
+		}
+		auto p=send;
+		auto start=sstart+pos+n;
+		while(p!=sstart+pos)
+		{
+			p--;
+			*(p+n)=*(p);
+		}
+		send=send+n;
+		for(int i=0;i<n;i++)
+		{
+			*(++start)=c;
+		
+	}
+	}
+	else 
+	{
+		auto newdata=alloc.allocate(size()+n);
+		auto clen=uninitialized_copy(sstart,sstart+pos,newdata);
+		for(int i=0;i<n;i++)
+		{
+			alloc.construct(clen+i,c);
+		}
+		clen=uninitialized_copy(sstart+pos,send,clen+n);
+		sstart=newdata;
+		send=scap=clen;
+	}
+	return *this;
+}

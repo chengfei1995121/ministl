@@ -239,7 +239,7 @@ String operator+(const char *c,const String &s1)
 	s3.scap=s3.sstart+s1.size()+len;
 	return s3;
 }
-void String::replace(int pos,int len,const String &s1)
+String &String::replace(int pos,int len,const String &s1)
 {
 	if(len>=s1.size())
 	{
@@ -300,4 +300,71 @@ void String::replace(int pos,int len,const String &s1)
 			scap=n;
 		}
 	}
+	return *this;
+}
+String &String::insert(int pos,const String &s1)
+{
+	if(size()+s1.size()<capacity())
+	{
+		auto len=s1.size();
+		for(int i=0;i<len;i++)
+		{
+			alloc.construct(send+i,'0');
+		}
+		auto p=send;
+		auto start=sstart+pos;
+		while(p!=sstart+pos)
+		{
+			p--;
+			*(p+len)=*(p);
+		}
+		send=send+len;
+		for(int i=0;i<len;i++)
+		{
+			*(++start)=*(s1.sstart+i);
+		}
+	}
+	else 
+	{
+		auto newdata=alloc.allocate(size()+s1.size());
+		auto n=uninitialized_copy(sstart,sstart+pos,newdata);
+		n=uninitialized_copy(s1.sstart,s1.send,n);
+		n=uninitialized_copy(sstart+pos,send,n);
+		sstart=newdata;
+		send=scap=n;
+	}
+	return *this;
+}
+String &String::insert(int pos,const char *c)
+{
+	const int len=strlen(c);
+	if(size()+len<capacity())
+	{
+		for(int i=0;i<len;i++)
+		{
+			alloc.construct(send+i,'0');
+		}
+		auto p=send;
+		auto start=sstart+pos;
+		while(p!=sstart+pos)
+		{
+			p--;
+			*(p+len)=*(p);
+		}
+		send=send+len;
+		for(int i=0;i<len;i++)
+		{
+			*(++start)=*(c+i);
+		}
+	}
+	else 
+	{
+		auto newdata=alloc.allocate(size()+len);
+		auto n=uninitialized_copy(sstart,sstart+pos,newdata);
+		n=uninitialized_copy(c,c+len,n);
+		n=uninitialized_copy(sstart+pos,send,n);
+		sstart=newdata;
+		send=scap=n;
+	}
+	return *this;
 }

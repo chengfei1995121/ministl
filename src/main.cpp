@@ -11,6 +11,6 @@ int main()
 	cout<<c<<endl;
 	String d("lmn");
 	cout<<d<<endl;
-	c.replace(2,18,d);
-	cout<<d<<endl;
+	d.insert(3,"cf");
+	cout<<d<<d.size()<<endl;
 }

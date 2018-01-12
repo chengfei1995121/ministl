@@ -33,7 +33,9 @@ class String{
 		String &operator+=(const char);
 		void check_size();
 		void push_back(char c);
-		void replace(int pos,int len,const String &);
+		String &replace(int pos,int len,const String &);
+		String &insert(int pos,const String&);
+		String &insert(int pos,const char *);
 		~String(){
 			free();
 		}

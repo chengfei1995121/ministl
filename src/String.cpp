@@ -241,8 +241,10 @@ String operator+(const char *c,const String &s1)
 }
 void String::replace(int pos,int len,const String &s1)
 {
-	if(len>=s1.size()&&len+pos+sstart<scap)
+	if(len>=s1.size())
 	{
+		if(len+pos+sstart<scap)
+		{
 		for(int i=0;i<s1.size();i++)
 		{
 			*(sstart+pos+i)=*(s1.sstart+i);
@@ -253,18 +255,21 @@ void String::replace(int pos,int len,const String &s1)
 		{
 		while(st+elen!=send)
 		{
-			cout<<"我在移动"<<endl;
 			*st=*(st+elen);
 			st++;
 		}
 		send=st;
+		}
+		}
+		else 
+		{
+			cout<<"超出范围"<<endl;
 		}
 	}
 	else 
 	{
 		if(capacity()>size()-len+s1.size())
 		{
-			cout<<"不分配"<<endl;
 			auto ylen=s1.size()-len;
 			auto st=sstart+pos+len;
 			for(int i=0;i<ylen;i++)
@@ -285,7 +290,6 @@ void String::replace(int pos,int len,const String &s1)
 		}
 		else 
 		{
-			cout<<"分配"<<endl;
 			auto newdata=alloc.allocate(size()-len+s1.size());
 			auto n=uninitialized_copy(sstart,sstart+pos,newdata);
 			n=uninitialized_copy(s1.sstart,s1.send,n);

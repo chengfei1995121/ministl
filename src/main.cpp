@@ -9,8 +9,8 @@ int main()
 	//String d="f";
 	string c("abcdefghijk");
 	cout<<c<<endl;
-	string d("lmn");
+	String d("lmn");
 	cout<<d<<endl;
 	d.insert(3,10,'c');
-	cout<<d<<d.size()<<endl;
+	cout<<d[0]<<d.size()<<endl;
 }

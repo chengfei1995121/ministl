@@ -4,7 +4,7 @@
 #include<string.h>
 allocator<char> String::alloc;
 String::String(const char *c){
-	int n=strlen(c);
+	size_t n=strlen(c);
 	auto newdata=alloc.allocate(n);
 	uninitialized_copy(c,c+strlen(c),newdata);
 	sstart=newdata;
@@ -49,7 +49,7 @@ void String::free()
 		alloc.deallocate(sstart,scap-send);
 	}
 }
-int String::size() const
+size_t String::size() const
 {
 	return send-sstart;	
 }
@@ -71,9 +71,9 @@ ostream &operator<<(ostream &os,String &s)
 	}
 	return os;
 }
-char &String::operator[](int n)
+char &String::operator[](size_t pos)
 {
-		return *(sstart+n);
+		return *(sstart+pos);
 }
 bool String::empty() const
 {
@@ -82,19 +82,19 @@ bool String::empty() const
 	else 
 		return false;
 }
-int String::capacity() const
+size_t String::capacity() const
 {
 	return scap-sstart;
 }
-char String::at(int n) const
+char String::at(size_t pos)
 {
-	if(n>=size())
+	if(pos>=size())
 	{
 		cout<<"越界"<<endl;
 		exit(-1);
 	}
 	else 
-		return *(sstart+n);
+		return *(sstart+pos);
 }
 String &String::operator+=(const String &s)
 {
@@ -239,13 +239,13 @@ String operator+(const char *c,const String &s1)
 	s3.scap=s3.sstart+s1.size()+len;
 	return s3;
 }
-String &String::replace(int pos,int len,const String &s1)
+String &String::replace(size_t pos,size_t len,const String &s1)
 {
 	if(len>=s1.size())
 	{
 		if(len+pos+sstart<scap)
 		{
-		for(int i=0;i<s1.size();i++)
+		for(size_t i=0;i<s1.size();i++)
 		{
 			*(sstart+pos+i)=*(s1.sstart+i);
 		}
@@ -272,7 +272,7 @@ String &String::replace(int pos,int len,const String &s1)
 		{
 			auto ylen=s1.size()-len;
 			auto st=sstart+pos+len;
-			for(int i=0;i<ylen;i++)
+			for(size_t i=0;i<ylen;i++)
 			{
 				alloc.construct(send+i,'0');
 			}
@@ -283,7 +283,7 @@ String &String::replace(int pos,int len,const String &s1)
 				*(p+ylen)=*p;
 			}
 			send=send+ylen;
-			for(int i=0;i<s1.size();i++)
+			for(size_t i=0;i<s1.size();i++)
 			{
 				*(sstart+pos+i)=*(s1.sstart+i);
 			}

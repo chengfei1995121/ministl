@@ -239,3 +239,61 @@ String operator+(const char *c,const String &s1)
 	s3.scap=s3.sstart+s1.size()+len;
 	return s3;
 }
+void String::replace(int pos,int len,const String &s1)
+{
+	if(len>=s1.size()&&len+pos+sstart<scap)
+	{
+		for(int i=0;i<s1.size();i++)
+		{
+			*(sstart+pos+i)=*(s1.sstart+i);
+		}
+		auto st=sstart+pos+s1.size();
+		auto elen=len-s1.size();
+		if(elen!=0)
+		{
+		while(st+elen!=send)
+		{
+			cout<<"我在移动"<<endl;
+			*st=*(st+elen);
+			st++;
+		}
+		send=st;
+		}
+	}
+	else 
+	{
+		if(capacity()>size()-len+s1.size())
+		{
+			cout<<"不分配"<<endl;
+			auto ylen=s1.size()-len;
+			auto st=sstart+pos+len;
+			for(int i=0;i<ylen;i++)
+			{
+				alloc.construct(send+i,'0');
+			}
+			auto p=send;
+			while(p!=st)
+			{
+				p--;
+				*(p+ylen)=*p;
+			}
+			send=send+ylen;
+			for(int i=0;i<s1.size();i++)
+			{
+				*(sstart+pos+i)=*(s1.sstart+i);
+			}
+		}
+		else 
+		{
+			cout<<"分配"<<endl;
+			auto newdata=alloc.allocate(size()-len+s1.size());
+			auto n=uninitialized_copy(sstart,sstart+pos,newdata);
+			n=uninitialized_copy(s1.sstart,s1.send,n);
+			n=uninitialized_copy(sstart+pos+len,send,n);
+			free();
+			sstart=newdata;
+			send=n;
+			scap=n;
+		}
+	}
+}

@@ -6,6 +6,11 @@ using namespace std;
 int main()
 {
 	String a("cf");
-	String d="fji"+a+a;
+	//String d="f";
+	String c("abcdefghijk");
+	cout<<c<<endl;
+	String d("lmn");
 	cout<<d<<endl;
+	d.replace(2,1,c);
+	cout<<d<<d.size()<<endl;
 }

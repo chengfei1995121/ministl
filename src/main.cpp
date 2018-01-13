@@ -8,9 +8,10 @@ int main()
 	String a("cf");
 	//String d="f";
 	String c("abcdefghijk");
-	cout<<c<<endl;
+//	cout<<c<<endl;
 	String d("ijm");
 	cout<<d<<endl;
-	cout<<c.find("ab",0)<<endl;
+	String e=c.substr(3);
+	cout<<e.size()<<' '<<e.capacity()<<endl;
 	cout<<c<<c.size()<<c.capacity()<<endl;
 }

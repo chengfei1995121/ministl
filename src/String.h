@@ -5,7 +5,7 @@
 using namespace std;
 class String{
 	public:
-		friend ostream &operator<<(ostream &os,String &s);
+		friend ostream &operator<<(ostream &os,const String &s);
 		friend 	bool operator==(const String &s1,const String &s2);
 		friend bool operator<(const String &s1,const String &s2);
 		friend bool operator<=(const String &s1,const String &s2);
@@ -42,6 +42,11 @@ class String{
 		size_t find(char c,size_t pos=0) const;
 		size_t find(const String &,size_t pos=0)const;
 		size_t find(const char *,size_t pos=0) const;
+		char &back();
+		const char &back()const;
+		char &front();
+		const char &front() const;
+		String substr(size_t pos=0,size_t len=npos) const;
 		~String(){
 			free();
 		}

@@ -27,7 +27,6 @@ String::String(const String &S)
 	uninitialized_copy(S.begin(),S.end(),newdata);
 	sstart=newdata;
 	send=scap=sstart+S.size();
-
 }
 String &String::operator=(const String &s)
 {
@@ -61,7 +60,7 @@ char *String::end() const
 {
 	return send;
 }
-ostream &operator<<(ostream &os,String &s)
+ostream &operator<<(ostream &os,const String &s)
 {
 	auto data=s.sstart;
 	while(data!=s.send)
@@ -452,6 +451,8 @@ size_t String::find(char c,size_t pos) const
 }
 size_t String::find(const String &s1,size_t pos) const 
 {
+	if(s1.size()>(size()+pos))
+		return npos;
 	for(auto p=sstart+pos;p+s1.size()<=send;p++)
 	{
 		auto q=p;
@@ -469,6 +470,8 @@ size_t String::find(const String &s1,size_t pos) const
 size_t String::find(const char *c,size_t pos) const 
 {
 	auto len=strlen(c);
+	if(len>(size()-pos))
+		return npos;
 	for(auto p=sstart+pos;p+len<=send;p++)
 	{
 		auto q=p;
@@ -480,6 +483,34 @@ size_t String::find(const char *c,size_t pos) const
 		}
 		if(*s1q=='\0')
 			return p-sstart;
+		
 	}
 	return npos;
+}
+char &String::back()
+{
+	return *(send-1);
+}
+const char &String::back() const
+{
+	return *(send-1); 
+}
+char &String::front()
+{
+	return *(sstart);
+}
+const char &String::front() const 
+{
+	return *(sstart);
+}
+String String::substr(size_t pos,size_t len) const 
+{
+	if(len==npos||sstart+pos+len>=send)
+		len=send-(sstart+pos);
+	auto newdata=alloc.allocate(pos+len);
+	auto n=uninitialized_copy(sstart+pos,sstart+pos+len,newdata);
+	String s;
+	s.sstart=newdata;
+	s.send=s.scap=n;
+	return s;
 }

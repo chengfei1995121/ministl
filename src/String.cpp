@@ -10,8 +10,8 @@ String::String(const char *c){
 	sstart=newdata;
 	send=scap=sstart+n;
 }
-String::String(int n,char c){
-	int i=0;
+String::String(size_t n,char c){
+	size_t i=0;
 	auto newdata=alloc.allocate(n);
 	while(i!=n)
 	{
@@ -302,12 +302,12 @@ String &String::replace(size_t pos,size_t len,const String &s1)
 	}
 	return *this;
 }
-String &String::insert(int pos,const String &s1)
+String &String::insert(size_t pos,const String &s1)
 {
 	if(size()+s1.size()<capacity())
 	{
 		auto len=s1.size();
-		for(int i=0;i<len;i++)
+		for(size_t i=0;i<len;i++)
 		{
 			alloc.construct(send+i,'0');
 		}
@@ -319,7 +319,7 @@ String &String::insert(int pos,const String &s1)
 			*(p+len)=*(p);
 		}
 		send=send+len;
-		for(int i=0;i<len;i++)
+		for(size_t i=0;i<len;i++)
 		{
 			*(++start)=*(s1.sstart+i);
 		}
@@ -335,12 +335,12 @@ String &String::insert(int pos,const String &s1)
 	}
 	return *this;
 }
-String &String::insert(int pos,const char *c)
+String &String::insert(size_t pos,const char *c)
 {
-	const int len=strlen(c);
+	const size_t len=strlen(c);
 	if(size()+len<capacity())
 	{
-		for(int i=0;i<len;i++)
+		for(size_t i=0;i<len;i++)
 		{
 			alloc.construct(send+i,'0');
 		}
@@ -352,7 +352,7 @@ String &String::insert(int pos,const char *c)
 			*(p+len)=*(p);
 		}
 		send=send+len;
-		for(int i=0;i<len;i++)
+		for(size_t i=0;i<len;i++)
 		{
 			*(++start)=*(c+i);
 		}
@@ -368,11 +368,11 @@ String &String::insert(int pos,const char *c)
 	}
 	return *this;
 }
-String &String::insert(int pos,int n,const char c)
+String &String::insert(size_t pos,size_t n,const char c)
 {
 	if(size()+n<capacity())
 	{
-		for(int i=0;i<n;i++)
+		for(size_t i=0;i<n;i++)
 		{
 			alloc.construct(send+i,'0');
 		}
@@ -384,7 +384,7 @@ String &String::insert(int pos,int n,const char c)
 			*(p+n)=*(p);
 		}
 		send=send+n;
-		for(int i=0;i<n;i++)
+		for(size_t i=0;i<n;i++)
 		{
 			*(++start)=c;
 		
@@ -394,13 +394,48 @@ String &String::insert(int pos,int n,const char c)
 	{
 		auto newdata=alloc.allocate(size()+n);
 		auto clen=uninitialized_copy(sstart,sstart+pos,newdata);
-		for(int i=0;i<n;i++)
+		for(size_t i=0;i<n;i++)
 		{
 			alloc.construct(clen+i,c);
 		}
 		clen=uninitialized_copy(sstart+pos,send,clen+n);
 		sstart=newdata;
 		send=scap=clen;
+	}
+	return *this;
+}
+void String::clear()
+{
+	auto p=send;
+	while(p!=sstart)
+	{
+		alloc.destroy(--p);
+	}
+	send=p;
+}
+String &String::erase(size_t pos,size_t len)
+{
+	if(pos+len>=size()||len>size())
+	{
+		auto p=sstart+pos;
+		while(p!=send)
+		{
+			alloc.destroy(p++);
+		}
+		send=sstart+pos;
+	}
+	else 
+	{
+		for(size_t i=0;i<len;i++)
+		{
+			alloc.destroy(sstart+pos+i);
+		}
+		auto p=sstart+pos+len;
+		for(;p!=send;p++)
+			*(p-len)=*p;
+		for(p=p-len;p!=send;p++)
+			alloc.destroy(p);
+		send=p-len;
 	}
 	return *this;
 }

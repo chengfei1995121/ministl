@@ -7,10 +7,10 @@ int main()
 {
 	String a("cf");
 	//String d="f";
-	string c("abcdefghijk");
+	String c("abcdefghijk");
 	cout<<c<<endl;
-	String d("lmn");
+	string d("lmn");
 	cout<<d<<endl;
-	d.insert(3,10,'c');
-	cout<<d[0]<<d.size()<<endl;
+	c.erase(3,5);
+	cout<<c<<c.size()<<c.capacity()<<endl;
 }

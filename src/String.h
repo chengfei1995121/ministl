@@ -17,7 +17,7 @@ class String{
 		friend String operator+(const char *c,const String &s1);
 		String():sstart(nullptr),send(nullptr),scap(nullptr){}
 		String(const char *c);
-		String(int n,char c);
+		String(size_t n,char c);
 		String(const String &);
 		String& operator=(const String &);
 		size_t size() const;
@@ -34,13 +34,16 @@ class String{
 		void check_size();
 		void push_back(char c);
 		String &replace(size_t pos,size_t len,const String &);
-		String &insert(int pos,const String&);
-		String &insert(int pos,const char *);
-		String &insert(int pos,int n,const char);
+		String &insert(size_t pos,const String&);
+		String &insert(size_t pos,const char *);
+		String &insert(size_t pos,size_t n,const char);
+		void clear();
+		String &erase(size_t pos=0,size_t len=npos);
 		~String(){
 			free();
 		}
 	private:
+		static const size_t npos=-1;
 		static allocator<char> alloc;
 		void reallocate();
 		char *sstart;

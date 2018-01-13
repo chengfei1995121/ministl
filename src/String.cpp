@@ -439,3 +439,47 @@ String &String::erase(size_t pos,size_t len)
 	}
 	return *this;
 }
+size_t String::find(char c,size_t pos) const
+{
+	for(auto p=sstart+pos;p!=send;p++)
+	{
+		if(p>=send)
+			break;
+		if((*p)==c)
+			return p-sstart;
+	}
+	return npos;
+}
+size_t String::find(const String &s1,size_t pos) const 
+{
+	for(auto p=sstart+pos;p+s1.size()<=send;p++)
+	{
+		auto q=p;
+		auto s1q=s1.sstart;
+		while(*q==*s1q&&s1q<s1.send)
+		{
+			q++;
+			s1q++;
+		}
+		if(s1q==s1.send)
+			return p-sstart;
+	}
+	return npos;
+}
+size_t String::find(const char *c,size_t pos) const 
+{
+	auto len=strlen(c);
+	for(auto p=sstart+pos;p+len<=send;p++)
+	{
+		auto q=p;
+		auto s1q=c;
+		while(*q==*s1q&&*s1q!='\0')
+		{
+			q++;
+			s1q++;
+		}
+		if(*s1q=='\0')
+			return p-sstart;
+	}
+	return npos;
+}

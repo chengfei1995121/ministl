@@ -9,8 +9,8 @@ int main()
 	//String d="f";
 	String c("abcdefghijk");
 	cout<<c<<endl;
-	string d("lmn");
+	String d("ijm");
 	cout<<d<<endl;
-	c.erase(3,5);
+	cout<<c.find("ab",0)<<endl;
 	cout<<c<<c.size()<<c.capacity()<<endl;
 }

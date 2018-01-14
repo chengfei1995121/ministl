@@ -475,6 +475,23 @@ const char *String::data() const noexcept
 {
 	return sstart;
 }
+size_t String::copy(char *c,size_t len,size_t pos) const 
+{
+	size_t i;
+	if(sstart+pos<send)
+	{
+		if(sstart+pos+len>send)
+			len=send-(sstart+pos);
+		for(i=0;i<len;i++)
+			c[i]=*(sstart+pos+i);
+	}
+	else 
+	{
+		cout<<"超出范围"<<endl;
+		exit(-1);
+	}
+	return i;
+}
 size_t String::find(char c,size_t pos) const
 {
 	for(auto p=sstart+pos;p!=send;p++)

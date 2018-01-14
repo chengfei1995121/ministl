@@ -56,6 +56,7 @@ class String{
 		String &insert(size_t pos,size_t n,const char);
 		void clear();
 		String &erase(size_t pos=0,size_t len=npos);
+		size_t copy(char *,size_t len,size_t pos=0) const;
 		const char *data() const noexcept;
 		size_t find(char c,size_t pos=0) const;
 		size_t find(const String &,size_t pos=0)const;

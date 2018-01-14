@@ -5,6 +5,15 @@
 using namespace std;
 class String{
 	public:
+		typedef char               value_type;
+		typedef char*              iterator;
+		typedef const char*        const_iterator;
+		typedef size_t             size_type;
+		typedef char*              pointer;
+		typedef char&              reference;
+
+
+
 		friend ostream &operator<<(ostream &os,const String &s);
 		friend 	bool operator==(const String &s1,const String &s2);
 		friend bool operator<(const String &s1,const String &s2);
@@ -15,14 +24,19 @@ class String{
 		friend String operator+(const String &s1,const String &s2);
 		friend String operator+(const String &s1,const char *c);
 		friend String operator+(const char *c,const String &s1);
+
+
+
+
 		String():sstart(nullptr),send(nullptr),scap(nullptr){}
+		String(const String &s1,size_t pos,size_t len=npos);
 		String(const char *c);
 		String(size_t n,char c);
 		String(const String &);
 		String& operator=(const String &);
 		size_t size() const;
-		char *begin() const;
-		char *end() const;
+		iterator begin() const;
+		iterator end() const;
 		void free();
 		char &operator[](size_t n);
 		bool empty()const;

@@ -10,6 +10,23 @@ String::String(const char *c){
 	sstart=newdata;
 	send=scap=sstart+n;
 }
+String::String(const String &s1,size_t pos,size_t len)
+{
+	if(s1.sstart+pos<s1.send)
+	{
+		if(len==npos||s1.sstart+pos+len>s1.send)
+			len=s1.send-(sstart+pos);
+		auto newdata=alloc.allocate(len);
+		send=uninitialized_copy(s1.sstart+pos,s1.sstart+pos+len,newdata);
+		scap=send;
+		sstart=newdata;
+	}
+	else 
+	{
+		cout<<"超出范围"<<endl;
+		exit(-1);
+	}
+}
 String::String(size_t n,char c){
 	size_t i=0;
 	auto newdata=alloc.allocate(n);
@@ -52,11 +69,11 @@ size_t String::size() const
 {
 	return send-sstart;	
 }
-char *String::begin() const 
+String::iterator String::begin() const 
 {
 	return sstart;
 }
-char *String::end() const
+String::iterator String::end() const
 {
 	return send;
 }

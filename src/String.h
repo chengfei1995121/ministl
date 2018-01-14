@@ -33,9 +33,12 @@ class String{
 		String(const char *c);
 		String(size_t n,char c);
 		String(const String &);
+		String(char *,size_t);
 		String& operator=(const String &);
 		size_t size() const;
 		iterator begin() const;
+		const_iterator cbegin() const noexcept;
+		const_iterator cend() const noexcept;
 		iterator end() const;
 		void free();
 		char &operator[](size_t n);
@@ -53,6 +56,7 @@ class String{
 		String &insert(size_t pos,size_t n,const char);
 		void clear();
 		String &erase(size_t pos=0,size_t len=npos);
+		const char *data() const noexcept;
 		size_t find(char c,size_t pos=0) const;
 		size_t find(const String &,size_t pos=0)const;
 		size_t find(const char *,size_t pos=0) const;

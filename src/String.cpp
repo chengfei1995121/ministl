@@ -6,7 +6,7 @@ allocator<char> String::alloc;
 String::String(const char *c){
 	size_t n=strlen(c);
 	auto newdata=alloc.allocate(n);
-	uninitialized_copy(c,c+strlen(c),newdata);
+	uninitialized_copy(c,c+n,newdata);
 	sstart=newdata;
 	send=scap=sstart+n;
 }
@@ -26,6 +26,14 @@ String::String(const String &s1,size_t pos,size_t len)
 		cout<<"超出范围"<<endl;
 		exit(-1);
 	}
+}
+String::String(char *c,size_t len)
+{
+	if(len>strlen(c))
+		len=strlen(c);
+	auto newdata=alloc.allocate(len);
+	send=scap=uninitialized_copy(c,c+len,newdata);
+	sstart=newdata;
 }
 String::String(size_t n,char c){
 	size_t i=0;
@@ -73,6 +81,14 @@ String::iterator String::begin() const
 {
 	return sstart;
 }
+String::const_iterator String::cbegin() const noexcept 
+{
+	return sstart;
+}
+String::const_iterator String::cend() const noexcept
+{
+	return send;
+}
 String::iterator String::end() const
 {
 	return send;
@@ -89,7 +105,7 @@ ostream &operator<<(ostream &os,const String &s)
 }
 char &String::operator[](size_t pos)
 {
-		return *(sstart+pos);
+	return *(sstart+pos);
 }
 bool String::empty() const
 {
@@ -261,21 +277,21 @@ String &String::replace(size_t pos,size_t len,const String &s1)
 	{
 		if(len+pos+sstart<scap)
 		{
-		for(size_t i=0;i<s1.size();i++)
-		{
-			*(sstart+pos+i)=*(s1.sstart+i);
-		}
-		auto st=sstart+pos+s1.size();
-		auto elen=len-s1.size();
-		if(elen!=0)
-		{
-		while(st+elen!=send)
-		{
-			*st=*(st+elen);
-			st++;
-		}
-		send=st;
-		}
+			for(size_t i=0;i<s1.size();i++)
+			{
+				*(sstart+pos+i)=*(s1.sstart+i);
+			}
+			auto st=sstart+pos+s1.size();
+			auto elen=len-s1.size();
+			if(elen!=0)
+			{
+				while(st+elen!=send)
+				{
+					*st=*(st+elen);
+					st++;
+				}
+				send=st;
+			}
 		}
 		else 
 		{
@@ -403,8 +419,8 @@ String &String::insert(size_t pos,size_t n,const char c)
 		for(size_t i=0;i<n;i++)
 		{
 			*(++start)=c;
-		
-	}
+
+		}
 	}
 	else 
 	{
@@ -455,6 +471,10 @@ String &String::erase(size_t pos,size_t len)
 	}
 	return *this;
 }
+const char *String::data() const noexcept 
+{
+	return sstart;
+}
 size_t String::find(char c,size_t pos) const
 {
 	for(auto p=sstart+pos;p!=send;p++)
@@ -500,7 +520,7 @@ size_t String::find(const char *c,size_t pos) const
 		}
 		if(*s1q=='\0')
 			return p-sstart;
-		
+
 	}
 	return npos;
 }

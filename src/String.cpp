@@ -519,15 +519,15 @@ String String::substr(size_t pos,size_t len) const
 	s.send=s.scap=n;
 	return s;
 }
-void String::swap(char **c1,char **c2)
+void String::swap(char *&c1,char *&c2)
 {
-	char *t=*c1;
-	*c1=*c2;
-	*c2=t;
+	char *t=c1;
+	c1=c2;
+	c2=t;
 }
 void String::swap(String &s1)
 {
-	swap(&sstart,&s1.sstart);
-	swap(&send,&s1.send);
-	swap(&scap,&s1.scap);
+	swap(sstart,s1.sstart);
+	swap(send,s1.send);
+	swap(scap,s1.scap);
 }

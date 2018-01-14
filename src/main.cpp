@@ -11,7 +11,7 @@ int main()
 //	cout<<c<<endl;
 	String d("ijm");
 	cout<<d<<endl;
-	String e=c.substr(3);
-	cout<<e.size()<<' '<<e.capacity()<<endl;
-	cout<<c<<c.size()<<c.capacity()<<endl;
+	d.swap(c);
+	cout<<d.size()<<' '<<d<<d.capacity()<<endl;
+	cout<<c<<c.size()<<' '<<c.capacity()<<endl;
 }

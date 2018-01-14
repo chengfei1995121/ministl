@@ -505,6 +505,11 @@ const char &String::front() const
 }
 String String::substr(size_t pos,size_t len) const 
 {
+	if(sstart+pos>=sstart)
+	{
+		cout<<"超出范围"<<endl;
+		exit(-1);
+	}
 	if(len==npos||sstart+pos+len>=send)
 		len=send-(sstart+pos);
 	auto newdata=alloc.allocate(pos+len);
@@ -513,4 +518,16 @@ String String::substr(size_t pos,size_t len) const
 	s.sstart=newdata;
 	s.send=s.scap=n;
 	return s;
+}
+void String::swap(char **c1,char **c2)
+{
+	char *t=*c1;
+	*c1=*c2;
+	*c2=t;
+}
+void String::swap(String &s1)
+{
+	swap(&sstart,&s1.sstart);
+	swap(&send,&s1.send);
+	swap(&scap,&s1.scap);
 }

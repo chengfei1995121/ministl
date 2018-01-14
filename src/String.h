@@ -47,6 +47,8 @@ class String{
 		char &front();
 		const char &front() const;
 		String substr(size_t pos=0,size_t len=npos) const;
+		void swap(String &);
+		void swap(char **,char **);
 		~String(){
 			free();
 		}

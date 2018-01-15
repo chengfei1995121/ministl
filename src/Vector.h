@@ -27,6 +27,7 @@ class Vector
 		void v_check();
 		void push_back(const value_type&);
 		T &operator[](size_t n);
+		Vector &operator=(const Vector &);
 		void free();
 		~Vector();
 	private:
@@ -104,5 +105,13 @@ template<typename T> void Vector<T>::push_back(const value_type &value)
 template<typename T> T &Vector<T>::operator[](size_t n)
 {
 	return *(element+n);
+}
+template<typename T> Vector<T> &Vector<T>::operator=(const Vector &v)
+{
+	auto newdata=alloc.allocate(v.size());
+	free();
+	auto n=uninitialized_copy(v.begin(),v.end(),newdata);
+	element=newdata;
+	first_free=cap=n;
 }
 #endif

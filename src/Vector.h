@@ -15,14 +15,13 @@ class Vector
 		typedef size_t        size_type;
 
 
-
 		Vector():element(nullptr),first_free(nullptr),cap(nullptr){}
 		Vector(size_t len,const T&);
 		Vector(const Vector&);
-		T *begin() noexcept;
-		T *end() noexcept;
-		const T *cbegin() const noexcept;
-		const T *cend() const noexcept;
+		iterator begin() noexcept;
+		iterator end() noexcept;
+		const iterator cbegin() const noexcept;
+		const iterator cend() const noexcept;
 		size_t size()const {return first_free-element;}
 		size_t capacity()const {return cap-element;}
 		bool empty() const noexcept;
@@ -32,7 +31,13 @@ class Vector
 		Vector &operator=(const Vector &);
 		void free();
 		T &at(size_t pos);
+		T &front();
+		T &back();
+		const T &front() const;
+		const T &back() const;
 		const T &at(size_t pos) const;
+		T *data();
+		const T *data() const noexcept;
 		~Vector();
 	private:
 		allocator<T>   alloc;
@@ -71,19 +76,19 @@ template<typename T> void Vector<T>::v_check(){
 	if(capacity()==size())
 		reallocate();
 }
-template<typename T> T* Vector<T>::begin() noexcept
+template<typename T> typename Vector<T>::iterator Vector<T>::begin() noexcept
 {
 	return element;
 }
-template<typename T> T* Vector<T>::end() noexcept
+template<typename T> typename Vector<T>::iterator Vector<T>::end() noexcept
 {
 	return first_free;
 }
-template<typename T> const T* Vector<T>::cbegin() const noexcept 
+template<typename T> const typename Vector<T>::iterator Vector<T>::cbegin() const noexcept 
 {
 	return element;
 }
-template<typename T> const T* Vector<T>::cend() const noexcept 
+template<typename T> const typename Vector<T>::iterator Vector<T>::cend() const noexcept 
 {
 	return first_free;
 }
@@ -146,5 +151,29 @@ template<typename T> const T &Vector<T>::at(size_t pos) const
 			exit(-1);
 		}
 
+}
+template<typename T> T &Vector<T>::front()
+{
+	return *element;
+}
+template<typename T> T &Vector<T>::back()
+{
+	return *(first_free-1);
+}
+template<typename T> const T &Vector<T>::front() const
+{
+	return *element;
+}
+template<typename T> const T &Vector<T>::back() const
+{
+	return *(first_free-1);
+}
+template<typename T> T *Vector<T>::data()
+{
+	return element;
+}
+template<typename T> const T *Vector<T>::data() const noexcept 
+{
+	return element;
 }
 #endif

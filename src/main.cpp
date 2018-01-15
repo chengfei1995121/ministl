@@ -1,19 +1,16 @@
-#include "String.h"
+#include "Vector.h"
 #include<iostream>
 #include<stdio.h>
 #include<string>
+#include<vector>
 using namespace std;
 int main()
 {
-	String a("cf");
-	//String d="f";
-	String c("abcdefghijk");
-	cout<<c<<endl;
-	String d("cf");
-	char e[100];
-	auto f=c.copy(e,3,5);
-	e[f]='\0';
-	cout<<e<<endl;
+	Vector<int> a(4,100);
+	a.push_back(5);
+	cout<<a.size()<<endl;
+	cout<<a.capacity()<<endl;
+	cout<<*a.begin()<<endl;
 	//cout<<d<<' '<<d<<d.capacity()<<endl;
 	//cout<<c<<c.size()<<' '<<c.capacity()<<endl;
 }

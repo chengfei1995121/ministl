@@ -38,6 +38,8 @@ class Vector
 		const T &at(size_t pos) const;
 		T *data();
 		const T *data() const noexcept;
+		void pop_back();
+		iterator insert(const_iterator pos,const T &);
 		~Vector();
 	private:
 		allocator<T>   alloc;
@@ -174,6 +176,28 @@ template<typename T> T *Vector<T>::data()
 }
 template<typename T> const T *Vector<T>::data() const noexcept 
 {
+	return element;
+}
+template<typename T> void Vector<T>::pop_back()
+{
+	if(element)
+	{
+		alloc.destroy(--first_free);
+	}
+}
+template<typename T> typename Vector<T>::iterator Vector<T>::insert(const_iterator pos,const T &value)
+{
+	v_check();
+	alloc.construct(first_free++);
+	auto start=first_free-1;
+	size_t len=first_free-pos-1;
+	cout<<*pos<<'\n'<<pos-element<<endl;
+	for(size_t i=0;i<len;i++)
+	{
+		cout<<"wo"<<endl;	
+	}
+	/*(element+(pos-element))=value;
+	*/
 	return element;
 }
 #endif

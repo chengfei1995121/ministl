@@ -2,6 +2,7 @@
 #define __MINISTL__VECTOR_H 
 #include<memory>
 #include<alloca.h>
+#include<iostream>
 using namespace std;
 template<typename T>
 class Vector 
@@ -24,11 +25,14 @@ class Vector
 		const T *cend() const noexcept;
 		size_t size()const {return first_free-element;}
 		size_t capacity()const {return cap-element;}
+		bool empty() const noexcept;
 		void v_check();
 		void push_back(const value_type&);
-		T &operator[](size_t n);
+		T &operator[](size_t pos);
 		Vector &operator=(const Vector &);
 		void free();
+		T &at(size_t pos);
+		const T &at(size_t pos) const;
 		~Vector();
 	private:
 		allocator<T>   alloc;
@@ -55,6 +59,14 @@ template<typename T> Vector<T>::Vector(size_t len,const T& value)
 	first_free=cap=element+len;
 }
 template<typename T> Vector<T>::~Vector(){free();}
+
+template<typename T> bool Vector<T>::empty() const noexcept 
+{
+	if(size())
+		return false;
+	else 
+		return true;
+}
 template<typename T> void Vector<T>::v_check(){
 	if(capacity()==size())
 		reallocate();
@@ -102,16 +114,37 @@ template<typename T> void Vector<T>::push_back(const value_type &value)
 	v_check();
 	alloc.construct(first_free++,value);
 }
-template<typename T> T &Vector<T>::operator[](size_t n)
+template<typename T> T &Vector<T>::operator[](size_t pos)
 {
-	return *(element+n);
+	return *(element+pos);
 }
 template<typename T> Vector<T> &Vector<T>::operator=(const Vector &v)
 {
 	auto newdata=alloc.allocate(v.size());
 	free();
-	auto n=uninitialized_copy(v.begin(),v.end(),newdata);
+	auto n=uninitialized_copy(v.element,v.first_free,newdata);
 	element=newdata;
 	first_free=cap=n;
+}
+template<typename T> T &Vector<T>::at(size_t pos)
+{
+	if(element+pos<first_free)
+		return *(element+pos);
+	else 
+	{
+		cout<<"超出范围"<<endl;
+		exit(-1);
+	}
+}
+template<typename T> const T &Vector<T>::at(size_t pos) const 
+{
+	if(element+pos<first_free)
+		return *(element+pos);
+	else 
+		{
+			cout<<"超出范围"<<endl;
+			exit(-1);
+		}
+
 }
 #endif

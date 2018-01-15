@@ -1,5 +1,5 @@
-Vector:main.o 
-	g++ -o Vector main.o -std=c++11
+test:main.o 
+	g++ -o test main.o -std=c++11
 String:String.o main.o
 	g++ -o String String.o main.o -std=c++11
 String.o:String.cpp

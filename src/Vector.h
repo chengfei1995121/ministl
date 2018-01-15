@@ -20,8 +20,8 @@ class Vector
 		Vector(const Vector&);
 		T *begin() noexcept;
 		T *end() noexcept;
-		const T *begin() const noexcept;
-		const T *end() const noexcept;
+		const T *cbegin() const noexcept;
+		const T *cend() const noexcept;
 		size_t size()const {return first_free-element;}
 		size_t capacity()const {return cap-element;}
 		void v_check();
@@ -66,11 +66,11 @@ template<typename T> T* Vector<T>::end() noexcept
 {
 	return first_free;
 }
-template<typename T> const T* Vector<T>::begin() const noexcept 
+template<typename T> const T* Vector<T>::cbegin() const noexcept 
 {
 	return element;
 }
-template<typename T> const T* Vector<T>::end() const noexcept 
+template<typename T> const T* Vector<T>::cend() const noexcept 
 {
 	return first_free;
 }

@@ -40,6 +40,8 @@ class Vector
 		const T *data() const noexcept;
 		void pop_back();
 		iterator insert(const_iterator pos,const T &);
+		iterator insert(const_iterator pos,size_t len,const T &);
+		iterator erase(const_iterator pos);
 		~Vector();
 	private:
 		allocator<T>   alloc;
@@ -196,5 +198,26 @@ template<typename T> typename Vector<T>::iterator Vector<T>::insert(const_iterat
 	}
 	*(element+len)=value;
 	return element+len;
+}
+template<typename T> typename Vector<T>::iterator Vector<T>::insert(const_iterator pos,size_t len,const T &value)
+{
+	auto pos_size=pos-element;
+	auto allocate_size=size()+len;
+	auto newdata=alloc.allocate(allocate_size);
+	auto n=uninitialized_copy(element,element+pos_size,newdata);
+	for(int i=0;i<len;i++)
+		alloc.construct(n++,value);
+	n=uninitialized_copy(element+pos_size,first_free,n);
+	element=newdata;
+	first_free=cap=n;
+	return element+pos_size;
+}
+template<typename T> typename Vector<T>::iterator Vector<T>::erase(const_iterator pos)
+{
+	auto pos_size=pos-element;
+	for(auto i=element+pos_size;i!=first_free-1;i++)
+		*i=*(i+1);
+	alloc.destroy(--first_free);
+	return element+pos_size;
 }
 #endif

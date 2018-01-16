@@ -14,7 +14,7 @@ int main()
 	vector<int> a(b);
 	cout<<a.size()<<endl;
 	cout<<a.capacity()<<'\n'<<endl;
-	a.insert(a.begin()+2,5);
+	a.erase(a.begin()+2);
 	for(auto i=a.begin();i!=a.end();i++)
 		cout<<*i<<endl;
 

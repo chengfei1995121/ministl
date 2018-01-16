@@ -42,6 +42,8 @@ class Vector
 		iterator insert(const_iterator pos,const T &);
 		iterator insert(const_iterator pos,size_t len,const T &);
 		iterator erase(const_iterator pos);
+		void clear() noexcept;
+		void swap(Vector &);
 		~Vector();
 	private:
 		allocator<T>   alloc;
@@ -219,5 +221,27 @@ template<typename T> typename Vector<T>::iterator Vector<T>::erase(const_iterato
 		*i=*(i+1);
 	alloc.destroy(--first_free);
 	return element+pos_size;
+}
+template<typename T> void Vector<T>::clear() noexcept
+{
+	auto i=first_free;
+	for(;i!=element;)
+	{
+		alloc.destroy(--i);
+	}
+	first_free=i;
+}
+template<typename T> void swap_value(T *&first,T *&second)
+{
+	T* t;
+	t=first;
+	first=second;
+	second=t;
+}
+template<typename T> void Vector<T>::swap(Vector &v)
+{
+	swap_value(element,v.element);
+	swap_value(first_free,v.first_free);
+	swap_value(cap,v.cap);
 }
 #endif

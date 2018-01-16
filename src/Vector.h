@@ -187,17 +187,14 @@ template<typename T> void Vector<T>::pop_back()
 }
 template<typename T> typename Vector<T>::iterator Vector<T>::insert(const_iterator pos,const T &value)
 {
+	auto len=pos-element;
 	v_check();
 	alloc.construct(first_free++);
-	auto start=first_free-1;
-	size_t len=first_free-pos-1;
-	cout<<*pos<<'\n'<<pos-element<<endl;
-	for(size_t i=0;i<len;i++)
+	for(auto i=first_free-1;i!=element+len;i--)
 	{
-		cout<<"wo"<<endl;	
+		*i=*(i-1);	
 	}
-	/*(element+(pos-element))=value;
-	*/
-	return element;
+	*(element+len)=value;
+	return element+len;
 }
 #endif

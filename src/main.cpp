@@ -6,12 +6,12 @@
 using namespace std;
 int main()
 {
-	Vector<int> b;
+	vector<int> b;
 	b.push_back(1);
 	b.push_back(2);
 	b.push_back(3);
 	b.push_back(4);
-	Vector<int> a(b);
+	vector<int> a(b);
 	cout<<a.size()<<endl;
 	cout<<a.capacity()<<'\n'<<endl;
 	a.insert(a.begin()+2,5);

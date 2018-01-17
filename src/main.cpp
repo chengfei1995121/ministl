@@ -13,8 +13,8 @@ int main()
 	b.push_back(4);
 	cout<<b.size()<<endl;
 	cout<<b.capacity()<<'\n'<<endl;
-	b.reserve(10);
-//	b.insert(b.begin(),2,10);
+	b.insert(b.begin(),10,10);
+	b.insert(b.begin(),2,10);
 	cout<<'\n'<<b.size()<<endl;
 	cout<<b.capacity()<<endl;
 	//cout<<d<<' '<<d<<d.capacity()<<endl;

@@ -206,17 +206,34 @@ template<typename T> typename Vector<T>::iterator Vector<T>::insert(const_iterat
 }
 template<typename T> typename Vector<T>::iterator Vector<T>::insert(const_iterator pos,size_t len,const T &value)
 {
+	if(size()+len<=capacity())
+	{
+		auto pos_size=pos-element;
+		for(size_t i=0;i<len;i++)
+		{
+			alloc.construct(first_free+i);
+		}
+		for(auto p=first_free-1;p!=pos-1;p--)
+			*(p+len)=*p;
+		for(size_t i=0;i<len;i++)
+			*(element+pos_size+i)=value;
+		first_free=first_free+len;
+		return element+pos_size;
+	}
+	else {
 	auto pos_size=pos-element;
-	auto allocate_size=size()+len;
+	auto allocate_size=size()+len<(size()+len)*2?(size()+len)*2:size()+len;
 	auto newdata=alloc.allocate(allocate_size);
 	auto n=uninitialized_copy(element,element+pos_size,newdata);
-	for(int i=0;i<len;i++)
+	for(size_t i=0;i<len;i++)
 		alloc.construct(n++,value);
 	n=uninitialized_copy(element+pos_size,first_free,n);
 	free();
 	element=newdata;
-	first_free=cap=n;
+	first_free=n;
+	cap=element+allocate_size;
 	return element+pos_size;
+	}
 }
 template<typename T> typename Vector<T>::iterator Vector<T>::erase(const_iterator pos)
 {

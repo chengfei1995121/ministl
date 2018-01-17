@@ -44,6 +44,8 @@ class Vector
 		iterator erase(const_iterator pos);
 		void clear() noexcept;
 		void swap(Vector &);
+		void resize(size_t n);
+		void resize(size_t n,const T &);
 		~Vector();
 	private:
 		allocator<T>   alloc;
@@ -243,5 +245,36 @@ template<typename T> void Vector<T>::swap(Vector &v)
 	swap_value(element,v.element);
 	swap_value(first_free,v.first_free);
 	swap_value(cap,v.cap);
+}
+template<typename T> void Vector<T>::resize(size_t n)
+{
+	if(n<size())
+	{
+		auto i=first_free;
+		while(i!=element+n)
+			alloc.destroy(--i);
+		first_free=i;
+	}
+	else 
+	{
+		if(n<=capacity())
+		{
+			auto len=n-size();
+			for(size_t i=0;i<len;i++)
+				alloc.construct(first_free++);
+		}
+		else 
+		{
+			size_t allocate_size=n<size()*2?size()*2:n;
+			auto newdata=alloc.allocate(allocate_size);
+			auto copy_pos=uninitialized_copy(element,first_free,newdata);
+			auto len=n-size();
+			for(size_t i=0;i<len;i++)
+				alloc.construct(copy_pos++);
+			element=newdata;
+			first_free=copy_pos;
+			cap=newdata+allocate_size;
+		}
+	}
 }
 #endif

@@ -6,15 +6,15 @@
 using namespace std;
 int main()
 {
-	vector<int> b;
+	Vector<int> b;
 	b.push_back(1);
 	b.push_back(2);
 	b.push_back(3);
 	b.push_back(4);
 	cout<<b.size()<<endl;
 	cout<<b.capacity()<<'\n'<<endl;
-	b.resize(20);
-//	b.resize(20);
+	b.reserve(10);
+//	b.insert(b.begin(),2,10);
 	cout<<'\n'<<b.size()<<endl;
 	cout<<b.capacity()<<endl;
 	//cout<<d<<' '<<d<<d.capacity()<<endl;

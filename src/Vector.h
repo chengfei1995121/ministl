@@ -46,6 +46,7 @@ class Vector
 		void swap(Vector &);
 		void resize(size_t n);
 		void resize(size_t n,const T &);
+		void reserve(size_t n);
 		~Vector();
 	private:
 		allocator<T>   alloc;
@@ -212,6 +213,7 @@ template<typename T> typename Vector<T>::iterator Vector<T>::insert(const_iterat
 	for(int i=0;i<len;i++)
 		alloc.construct(n++,value);
 	n=uninitialized_copy(element+pos_size,first_free,n);
+	free();
 	element=newdata;
 	first_free=cap=n;
 	return element+pos_size;
@@ -261,7 +263,7 @@ template<typename T> void Vector<T>::resize(size_t n)
 		{
 			auto len=n-size();
 			for(size_t i=0;i<len;i++)
-				alloc.construct(first_free++);
+				alloc.construct(first_free++,T());
 		}
 		else 
 		{
@@ -270,11 +272,57 @@ template<typename T> void Vector<T>::resize(size_t n)
 			auto copy_pos=uninitialized_copy(element,first_free,newdata);
 			auto len=n-size();
 			for(size_t i=0;i<len;i++)
-				alloc.construct(copy_pos++);
+				alloc.construct(copy_pos++,T());
+			free();
 			element=newdata;
 			first_free=copy_pos;
 			cap=newdata+allocate_size;
 		}
+	}
+}
+template<typename T> void Vector<T>::resize(size_t n,const T &value)
+{
+	if(n<size())
+	{
+		auto i=first_free;
+		while(i!=element+n)
+			alloc.destroy(--i);
+		first_free=i;
+	}
+	else 
+	{
+		if(n<=capacity())
+		{
+			auto len=n-size();
+			for(size_t i=0;i<len;i++)
+				alloc.construct(first_free++,value);
+		}
+		else 
+		{
+			size_t allocate_size=n<size()*2?size()*2:n;
+			auto newdata=alloc.allocate(allocate_size);
+			auto copy_pos=uninitialized_copy(element,first_free,newdata);
+			auto len=n-size();
+			for(size_t i=0;i<len;i++)
+				alloc.construct(copy_pos++,value);
+			free();
+			element=newdata;
+			first_free=copy_pos;
+			cap=newdata+allocate_size;
+		}
+	}
+
+}
+template<typename T> void Vector<T>::reserve(size_t n)
+{
+	if(n>capacity())
+	{
+		auto newdata=alloc.allocate(n);
+		auto copy_pos=uninitialized_copy(element,first_free,newdata);
+		free();
+		element=newdata;
+		first_free=copy_pos;
+		cap=element+n;
 	}
 }
 #endif
